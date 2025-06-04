@@ -1,6 +1,8 @@
 async function getWeather() {
   const city = document.getElementById("cityInput").value.trim();
-  const apiKey = '5552ff543cb1142bf239388247999839'; // 你的 OpenWeatherMap API 金鑰
+  const name = document.getElementById("customerName").value.trim();
+  const phone = document.getElementById("customerPhone").value.trim();
+  const apiKey = '5552ff543cb1142bf239388247999839';
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric&lang=zh_tw`;
 
   try {
@@ -24,11 +26,12 @@ async function getWeather() {
       <p class="text-green-600 font-semibold mt-2">${suggestion}</p>
     `;
 
-    // ✅ 傳送資料到 Render 後端
-    await fetch("https://yea-u0oa.onrender.com/api/save-forecast", {
+    await fetch("/api/save-forecast", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        customerName: name,
+        customerPhone: phone,
         city: data.name,
         temperature,
         condition: data.weather[0].description,
